@@ -1,0 +1,21 @@
+# //TUDO QUE EU NAO QUERO QUE SUBA PRO GITHUB 
+# //SENHAS, CHAVES,
+# Node
+node_modules/
+npm-debug.log
+
+# Ambiente
+.env
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# IDEs
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
