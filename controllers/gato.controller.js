@@ -18,10 +18,16 @@ exports.criar = async (req, res) => {
     }
 
     const gato = await Gato.create(dadosGato);
+    const gatoData = gato.toJSON();
+    
+    if (gatoData.imagem && !gatoData.imagem.startsWith('http')) {
+      gatoData.imagem = `http://localhost:3000${gatoData.imagem}`;
+    }
+    
     res.status(201).json({
       sucesso: true,
       mensagem: 'Gato cadastrado com sucesso!',
-      dados: gato
+      dados: gatoData
     });
   } catch (err) {
     // Se houver erro, deletar a imagem que foi uploaded
@@ -40,9 +46,20 @@ exports.criar = async (req, res) => {
 exports.listar = async (req, res) => {
   try {
     const gatos = await Gato.findAll();
+    
+    // Garantir que o caminho da imagem está correto
+    const gatosComImagem = gatos.map(gato => {
+      const gatoData = gato.toJSON();
+      // Se a imagem não começa com http, é um caminho relativo
+      if (gatoData.imagem && !gatoData.imagem.startsWith('http')) {
+        gatoData.imagem = `http://localhost:3000${gatoData.imagem}`;
+      }
+      return gatoData;
+    });
+
     res.json({
       sucesso: true,
-      dados: gatos
+      dados: gatosComImagem
     });
   } catch (err) {
     res.status(500).json({
@@ -61,9 +78,15 @@ exports.obterPorId = async (req, res) => {
         erro: 'Gato não encontrado'
       });
     }
+    
+    const gatoData = gato.toJSON();
+    if (gatoData.imagem && !gatoData.imagem.startsWith('http')) {
+      gatoData.imagem = `http://localhost:3000${gatoData.imagem}`;
+    }
+    
     res.json({
       sucesso: true,
-      dados: gato
+      dados: gatoData
     });
   } catch (err) {
     res.status(500).json({
@@ -103,10 +126,16 @@ exports.atualizar = async (req, res) => {
     }
 
     await gato.update(dadosAtualizacao);
+    const gatoData = gato.toJSON();
+    
+    if (gatoData.imagem && !gatoData.imagem.startsWith('http')) {
+      gatoData.imagem = `http://localhost:3000${gatoData.imagem}`;
+    }
+    
     res.json({
       sucesso: true,
       mensagem: 'Gato atualizado com sucesso!',
-      dados: gato
+      dados: gatoData
     });
   } catch (err) {
     // Se houver erro, deletar a imagem que foi uploaded

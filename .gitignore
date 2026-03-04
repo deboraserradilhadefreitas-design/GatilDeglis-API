@@ -1,8 +1,10 @@
-# //TUDO QUE EU NAO QUERO QUE SUBA PRO GITHUB 
-# //SENHAS, CHAVES,
+# Ignorar arquivos e pastas específicos
 # Node
 node_modules/
 npm-debug.log
+/uploads/
+/postman/
+.postman/
 
 # Ambiente
 .env
