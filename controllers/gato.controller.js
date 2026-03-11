@@ -9,8 +9,17 @@ exports.criar = async (req, res) => {
       raca: req.body.raca,
       sexo: req.body.sexo,
       coloracao: req.body.coloracao,
-      observacoes: req.body.observacoes
+      observacoes: req.body.observacoes,
+      status: req.body.status || 'Disponível'
     };
+
+    // Validação mínima de campos obrigatórios
+    if (!dadosGato.nome || !dadosGato.raca || !dadosGato.sexo || !dadosGato.coloracao) {
+      return res.status(400).json({
+        sucesso: false,
+        erro: 'Os campos nome, raça, sexo e coloração são obrigatórios.'
+      });
+    }
 
     // Se houver arquivo enviado, salvar o caminho
     if (req.file) {
@@ -111,7 +120,8 @@ exports.atualizar = async (req, res) => {
       raca: req.body.raca || gato.raca,
       sexo: req.body.sexo || gato.sexo,
       coloracao: req.body.coloracao || gato.coloracao,
-      observacoes: req.body.observacoes || gato.observacoes
+      observacoes: req.body.observacoes || gato.observacoes,
+      status: req.body.status || gato.status
     };
 
     // Se houver nova imagem, deletar a antiga e salvar a nova

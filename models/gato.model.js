@@ -27,6 +27,11 @@ const Gato = sequelize.define('Gato', {
     type: DataTypes.TEXT,
     allowNull: true
   },
+  status: {
+    type: DataTypes.ENUM('Disponível', 'Vendido', 'Reservado'),
+    allowNull: false,
+    defaultValue: 'Disponível'
+  },
   imagem: {
     type: DataTypes.STRING,
     allowNull: true
