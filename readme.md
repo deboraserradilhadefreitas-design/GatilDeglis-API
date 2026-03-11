@@ -1,17 +1,29 @@
-estrutura inicial
+# 🐾 GatilDeglis API
 
-mkdir -p config controllers models routes
-touch app.js .env \
-  config/database.js \
-  controllers/usuario.controller.js \
-  models/usuario.model.js \
-  routes/usuario.routes.js
+API desenvolvida para o sistema **GatilDeglis**, responsável pelo gerenciamento dos dados do gatil.
 
-Modelo de estrutura da API: MVC
+A API fornece endpoints para cadastro e consulta de informações utilizadas pelo frontend Angular.
 
+## 🚀 Tecnologias
 
-rodar o projeto: 
+- Node.js
+- Express
+- REST API
+- Banco de dados SQL
 
-npm install
+## 📂 Estrutura
 
-npm run dev
+src
+- controllers
+- routes
+- models
+- services
+- database
+
+## 🔗 Integração
+
+Esta API é utilizada pelo projeto frontend **GatilDeglis** desenvolvido em Angular.
+
+## 👩‍💻 Autora
+
+Débora Serradilha de Freitas
