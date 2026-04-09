@@ -35,6 +35,10 @@ const Gato = sequelize.define('Gato', {
   imagem: {
     type: DataTypes.STRING,
     allowNull: true
+  },
+  data_nascimento: {
+    type: DataTypes.DATE,
+    allowNull: true
   }
 }, {
   tableName: 'gatos',

@@ -7,6 +7,7 @@ const cors = require('cors');
 const sequelize = require('./config/database');
 const usuarioRoutes = require('./routes/usuario.routes');
 const gatoRoutes = require('./routes/gato.routes');
+const ninhadaRoutes = require('./routes/ninhada.routes');
 
 // Garante que a pasta de uploads exista e evita falha no multer
 const uploadsFolder = path.join(__dirname, 'uploads');
@@ -24,6 +25,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Rotas
 app.use('/usuarios', usuarioRoutes);
 app.use('/gatos', gatoRoutes); 
+app.use('/ninhadas', ninhadaRoutes); 
 
 // Middlewares de tratamento de erros (inclui multer e CORS, 500 e 400)
 app.use((err, req, res, next) => {
