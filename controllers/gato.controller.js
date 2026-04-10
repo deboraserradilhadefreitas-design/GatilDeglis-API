@@ -4,14 +4,22 @@ const path = require('path');
 
 exports.criar = async (req, res) => {
   try {
+    console.log('=== CRIAR GATO ===');
+    console.log('req.body:', req.body);
+    console.log('req.file:', req.file ? 'Arquivo enviado' : 'Sem arquivo');
+    
     const dadosGato = {
       nome: req.body.nome,
       raca: req.body.raca,
       sexo: req.body.sexo,
       coloracao: req.body.coloracao,
-      observacoes: req.body.observacoes,
-      status: req.body.status || 'Disponível'
+      observacoes: req.body.observacoes || '',
+      status: req.body.status || null,
+      tipo: req.body.tipo || 'gato',
+      idade: req.body.idade ? parseInt(req.body.idade) : null
     };
+
+    console.log('Dados processados:', dadosGato);
 
     // Validação mínima de campos obrigatórios
     if (!dadosGato.nome || !dadosGato.raca || !dadosGato.sexo || !dadosGato.coloracao) {
@@ -56,12 +64,16 @@ exports.listar = async (req, res) => {
   try {
     const gatos = await Gato.findAll();
     
-    // Garantir que o caminho da imagem está correto
+    // Garantir que o caminho da imagem está correto e adicionar tipo padrão para dados legados
     const gatosComImagem = gatos.map(gato => {
       const gatoData = gato.toJSON();
       // Se a imagem não começa com http, é um caminho relativo
       if (gatoData.imagem && !gatoData.imagem.startsWith('http')) {
         gatoData.imagem = `http://localhost:3000${gatoData.imagem}`;
+      }
+      // Se não tiver tipo (dados legados), definir como 'gato' por padrão
+      if (!gatoData.tipo) {
+        gatoData.tipo = 'gato';
       }
       return gatoData;
     });
@@ -92,6 +104,10 @@ exports.obterPorId = async (req, res) => {
     if (gatoData.imagem && !gatoData.imagem.startsWith('http')) {
       gatoData.imagem = `http://localhost:3000${gatoData.imagem}`;
     }
+    // Se não tiver tipo (dados legados), definir como 'gato' por padrão
+    if (!gatoData.tipo) {
+      gatoData.tipo = 'gato';
+    }
     
     res.json({
       sucesso: true,
@@ -107,6 +123,11 @@ exports.obterPorId = async (req, res) => {
 
 exports.atualizar = async (req, res) => {
   try {
+    console.log('=== ATUALIZAR GATO ===');
+    console.log('ID:', req.params.id);
+    console.log('req.body:', req.body);
+    console.log('req.body.tipo:', req.body.tipo);
+    
     const gato = await Gato.findByPk(req.params.id);
     if (!gato) {
       return res.status(404).json({
@@ -115,14 +136,21 @@ exports.atualizar = async (req, res) => {
       });
     }
 
+    //  return res.json({ debugTipo: req.body.tipo, body: req.body });
+
+
     const dadosAtualizacao = {
-      nome: req.body.nome || gato.nome,
-      raca: req.body.raca || gato.raca,
-      sexo: req.body.sexo || gato.sexo,
-      coloracao: req.body.coloracao || gato.coloracao,
-      observacoes: req.body.observacoes || gato.observacoes,
-      status: req.body.status || gato.status
+      nome: req.body.nome ? req.body.nome : gato.nome,
+      raca: req.body.raca ? req.body.raca : gato.raca,
+      sexo: req.body.sexo ? req.body.sexo : gato.sexo,
+      coloracao: req.body.coloracao ? req.body.coloracao : gato.coloracao,
+      observacoes: req.body.observacoes !== undefined ? req.body.observacoes : gato.observacoes,
+      status: req.body.status !== undefined && req.body.status ? req.body.status : (req.body.status === '' ? null : gato.status),
+      tipo: req.body.tipo ? req.body.tipo : gato.tipo,
+      idade: req.body.idade ? parseInt(req.body.idade) : gato.idade
     };
+
+    console.log('Dados finais para atualização:', dadosAtualizacao);
 
     // Se houver nova imagem, deletar a antiga e salvar a nova
     if (req.file) {

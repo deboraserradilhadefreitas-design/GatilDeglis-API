@@ -29,8 +29,8 @@ const Gato = sequelize.define('Gato', {
   },
   status: {
     type: DataTypes.ENUM('Disponível', 'Vendido', 'Reservado'),
-    allowNull: false,
-    defaultValue: 'Disponível'
+    allowNull: true,
+    defaultValue: null
   },
   imagem: {
     type: DataTypes.STRING,
@@ -39,6 +39,19 @@ const Gato = sequelize.define('Gato', {
   data_nascimento: {
     type: DataTypes.DATE,
     allowNull: true
+  },
+  idade: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    validate: {
+      min: 0,
+      max: 30
+    }
+  },
+  tipo: {
+    type: DataTypes.ENUM('filhote', 'gato'),
+    allowNull: false,
+    defaultValue: 'gato'
   }
 }, {
   tableName: 'gatos',
