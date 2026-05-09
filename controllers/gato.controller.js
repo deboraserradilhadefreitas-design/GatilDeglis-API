@@ -1,4 +1,5 @@
 const Gato = require('../models/gato.model');
+const Reserva = require('../models/reserva.model');
 const fs = require('fs');
 const path = require('path');
 
@@ -63,6 +64,44 @@ exports.criar = async (req, res) => {
 exports.listar = async (req, res) => {
   try {
     const gatos = await Gato.findAll();
+    
+    // Garantir que o caminho da imagem está correto e adicionar tipo padrão para dados legados
+    const gatosComImagem = gatos.map(gato => {
+      const gatoData = gato.toJSON();
+      // Se a imagem não começa com http, é um caminho relativo
+      if (gatoData.imagem && !gatoData.imagem.startsWith('http')) {
+        gatoData.imagem = `http://localhost:3000${gatoData.imagem}`;
+      }
+      // Se não tiver tipo (dados legados), definir como 'gato' por padrão
+      if (!gatoData.tipo) {
+        gatoData.tipo = 'gato';
+      }
+      return gatoData;
+    });
+
+    res.json({
+      sucesso: true,
+      dados: gatosComImagem
+    });
+  } catch (err) {
+    res.status(500).json({
+      sucesso: false,
+      erro: err.message
+    });
+  }
+};
+
+exports.listarReservados = async (req, res) => {
+  try {
+    const gatos = await Gato.findAll({
+      include: [
+        {
+          model: Reserva,
+          as: 'Reservas',
+          required: true
+        }
+      ]
+    });
     
     // Garantir que o caminho da imagem está correto e adicionar tipo padrão para dados legados
     const gatosComImagem = gatos.map(gato => {

@@ -8,6 +8,12 @@ const sequelize = require('./config/database');
 const usuarioRoutes = require('./routes/usuario.routes');
 const gatoRoutes = require('./routes/gato.routes');
 const ninhadaRoutes = require('./routes/ninhada.routes');
+const reservaRoutes = require('./routes/reserva.routes');
+
+// Importar modelos para criar associações
+const Gato = require('./models/gato.model');
+const Ninhada = require('./models/ninhada.model');
+const Reserva = require('./models/reserva.model');
 
 // Garante que a pasta de uploads exista e evita falha no multer
 const uploadsFolder = path.join(__dirname, 'uploads');
@@ -22,10 +28,15 @@ app.use(express.urlencoded({ extended: true }));
 // Servir arquivos estáticos da pasta de uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Definir associações dos modelos
+Reserva.belongsTo(Gato, { foreignKey: 'gato_id', as: 'Gato' });
+Gato.hasMany(Reserva, { foreignKey: 'gato_id', as: 'Reservas' });
+
 // Rotas
 app.use('/usuarios', usuarioRoutes);
 app.use('/gatos', gatoRoutes); 
-app.use('/ninhadas', ninhadaRoutes); 
+app.use('/ninhadas', ninhadaRoutes);
+app.use('/reservas', reservaRoutes); 
 
 // Middlewares de tratamento de erros (inclui multer e CORS, 500 e 400)
 app.use((err, req, res, next) => {

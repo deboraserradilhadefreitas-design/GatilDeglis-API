@@ -30,6 +30,7 @@ const upload = multer({
 
 router.post('/', upload.single('imagem'), gatoController.criar);
 router.get('/', gatoController.listar);
+router.get('/reservados', gatoController.listarReservados);
 router.get('/:id', gatoController.obterPorId);
 router.put('/:id', upload.single('imagem'), gatoController.atualizar);
 router.delete('/:id', gatoController.deletar);
