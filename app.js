@@ -10,12 +10,14 @@ const gatoRoutes = require('./routes/gato.routes');
 const ninhadaRoutes = require('./routes/ninhada.routes');
 const reservaRoutes = require('./routes/reserva.routes');
 const contatoRoutes = require('./routes/contato.routes');
+const galeriaRoutes = require('./routes/galeria.routes');
 
 // Importar modelos para criar associações
 const Gato = require('./models/gato.model');
 const Ninhada = require('./models/ninhada.model');
 const Reserva = require('./models/reserva.model');
 const Contato = require('./models/contato.model');
+const Galeria = require('./models/galeria.model');
 
 // Garante que a pasta de uploads exista e evita falha no multer
 const uploadsFolder = path.join(__dirname, 'uploads');
@@ -40,6 +42,7 @@ app.use('/gatos', gatoRoutes);
 app.use('/ninhadas', ninhadaRoutes);
 app.use('/reservas', reservaRoutes);
 app.use('/contatos', contatoRoutes); 
+app.use('/galeria', galeriaRoutes);
 
 // Middlewares de tratamento de erros (inclui multer e CORS, 500 e 400)
 app.use((err, req, res, next) => {
